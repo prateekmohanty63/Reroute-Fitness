@@ -1,5 +1,5 @@
 from django.http.response import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, resolve_url
 from django.http import HttpResponse
 #from .models import Events
 from django.contrib.auth.models import User,auth
@@ -35,17 +35,6 @@ def contact(request):
         message=request.POST['message']
         subject = "User Tried to Contact"
         email_template_name = "contact_info_mail.txt"
-
-        # send an email
-        # send_mail(
-        #     'message_from  '+ name,
-        #     message,
-        #     mail,
-        #     ['prateekmohanty63@gmail.com'],
-        # )
-
-
-
         c = {
         "email":mail,
         "mobile":phone,
@@ -57,7 +46,7 @@ def contact(request):
         }
         email = render_to_string(email_template_name, c)
         try:
-            send_mail(subject, email, 'admin@example.com' , to, fail_silently=False)
+            send_mail(subject, email, 'dbmsprojekt@gmail.com' , ['reroutefitness@gmail.com'], fail_silently=False)
         except BadHeaderError:
             return HttpResponse('Invalid header found.')
         return redirect('/')
@@ -146,25 +135,32 @@ def about(request):
 def gallery(request):
     return render(request,'gallery.html')
 
+# url for searching events
+def search_event(request):
+    if request.method=="POST":
+        searched=request.POST['searched']
+        searched=searched.upper()
+        print(searched)
+        events=Events.objects.filter(name__contains=searched)
+        return render(request,'event_search_res.html',{'searched':searched,'events':events})
+    return render(request,'event_search.html')
+def search_prog(request):
+    return render(request,'event_search_res.html')
+
 def event(request):
-    # event1=Events()
-    # event1.name='Trekking'
-    # event1.price=100
-
-    # event2=Events()
-    # event2.name='Mountaineering'
-    # event2.price=500
-
-    # event3=Events()
-    # event3.name='Cycling'
-    # event3.price=900
-
-    # events=[event1,event2,event3]
-
     events=Events.objects.all()
 
     
     return render(request,"event.html",{'events':events})
+
+def event_img(request):
+    return render(request,'events_gallery.html')
+def my_event(request):
+    if request.user.is_authenticated:
+         return render(request,"my_events.html",{})
+    else:
+        return render(request,"/")
+   
 
 # payment integration
 

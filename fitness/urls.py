@@ -17,7 +17,11 @@ urlpatterns=[
     path("payment",views.payment,name="payment"),
     path("about/",views.about,name="about"),
     path("gallery/",views.gallery,name="gallery"),
-    path("event/",views.event,name="event"),
+    path("event/",views.event,name="event"),                 # url for events
+    path("event_gallery/",views.event_img,name="event_gallery"),   # url for event gallery
+    path("my_events/",views.my_event,name="my_event"),            #  url for events attended by a user
+    path('search_event/',views.search_event,name="search_event"),
+     path('search_prog/',views.search_prog,name="search_prog"),
 
 
 ]
