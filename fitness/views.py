@@ -16,6 +16,7 @@ from django.utils.encoding import force_bytes
 from  django.views.decorators.csrf import csrf_exempt
 from .models import Events
 from django.core.mail import send_mail
+import re
 
 from fitness.models import Events
 from .PayTm import Checksum
@@ -62,6 +63,22 @@ def register(request):
         email=request.POST['email']
         password1=request.POST['password1']
         password2=request.POST['password2']
+        
+        if(password1==username):
+            messages.info(request,'Too common password, please enter a different password')
+            return redirect('register')
+
+        if(len(password1)<5):
+            messages.info(request,'Too short password, please select a longer one');
+            return redirect('register')
+        flag=0
+        if re.match('^[0-9]*$', password1):
+            messages.info(request,'The password cannot be entirely unique,please try again')
+            return redirect('register')
+        if not password1.isdigit():
+            messages.info(request,'Please make sure your password has at least one number in it')
+            return redirect('register')
+
         if password1==password2:
             if User.objects.filter(username=username).exists():
                 messages.info(request,'Username taken')
@@ -160,6 +177,12 @@ def my_event(request):
          return render(request,"my_events.html",{})
     else:
         return render(request,"/")
+
+
+def event_reg(request):
+    events=Events.objects.all()
+
+    return render(request,'event_reg.html',{'events':events})
    
 
 # payment integration

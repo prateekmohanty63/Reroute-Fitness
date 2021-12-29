@@ -39,10 +39,12 @@ urlpatterns = [
     # path("gallery/",views.gallery,name="gallery"),
     # path("event/",views.event,name="event"),
     path('',include('fitness.urls')),
-     path("event_gallery/",views.event_img,name="event_gallery"),
-      path("my_events/",views.my_event,name="my_event"),
-       path('search_event/',views.search_event,name="search_event"),
-       path('search_prog/',views.search_prog,name="search_prog"),
+    path("event_gallery/",views.event_img,name="event_gallery"),
+    path("my_events/",views.my_event,name="my_event"),
+    path('search_event/',views.search_event,name="search_event"),
+    path('search_prog/',views.search_prog,name="search_prog"),
+    path('event_reg/',views.event_reg,name="event_reg")
+ 
 ]
 
 urlpatterns=urlpatterns+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
